@@ -14,22 +14,26 @@ case_no=int(input())
 for __ in range(case_no):
   N=int(input())
   A=list(map(int,input().split()))
-  l,r=0,max(A)
-  for i in range(40):
+  l,r=0,max(A)+1
+  while r-l>10**-4:
     tmp=(l+r)/2
-    s=0
-    a=0
+    dp=[[0]*2 for _ in range(N+1)]
     for j in range(N):
-      if A[j]>=tmp:
-        a+=A[j]-tmp
-      else:
-        if s==0:
-          if j<N-1:
-            a+=max(A[j],A[j+1])-tmp
-          s=1
-        else:
-          s=0
-    if a>=0:
+      dp[j+1][0]=max(dp[j])+A[j]-tmp
+      dp[j+1][1]=dp[j][0]
+    if max(dp[-1])>=0:
+      l=tmp
+    else:
+      r=tmp
+  print(l)
+  l,r=0,max(A)+1
+  while r-l>1:
+    tmp=(l+r)//2
+    dp=[[0]*2 for _ in range(N+1)]
+    for j in range(N):
+      dp[j+1][0]=max(dp[j])+(1 if A[j]>=tmp else -1)
+      dp[j+1][1]=dp[j][0]
+    if max(dp[-1])>0:
       l=tmp
     else:
       r=tmp
